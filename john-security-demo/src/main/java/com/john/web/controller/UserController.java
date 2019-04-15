@@ -7,6 +7,8 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
@@ -33,6 +35,8 @@ import com.john.exception.UserNotExistException;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+	
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@PostMapping
 	public User create(@Valid @RequestBody User user) {
@@ -90,12 +94,19 @@ public class UserController {
 	@GetMapping("/{id:\\d+}")
 	@JsonView(User.UserDetailView.class)
 	public User getInfo(@PathVariable String id) {
-		
-		throw new UserNotExistException(id);
-		
-//		User user = new User();
-//		user.setUsername("tom");
-//		return user;
+//		throw new UserNotExistException(id);
+		long start = System.currentTimeMillis();
+		logger.info("进入getInfo服务" + start);
+		try {
+			Thread.sleep(30000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		User user = new User();
+		user.setUsername("tom");
+		logger.info("离开getInfo服务，耗时：" + (System.currentTimeMillis() - start));
+		return user;
 	}
 	
 }
