@@ -27,6 +27,9 @@ import com.john.dto.User;
 import com.john.dto.UserQueryCondition;
 import com.john.exception.UserNotExistException;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 /**
 * 
 * @author john
@@ -77,6 +80,7 @@ public class UserController {
 
 	@GetMapping()
 	@JsonView(User.UserSimpleView.class)
+	@ApiOperation(value = "用户查询方法")
 	public List<User> query(UserQueryCondition userQueryCondition, 
 			@PageableDefault(page = 1, size = 17, sort = "username,asc") Pageable pageable) {
 		
@@ -93,7 +97,7 @@ public class UserController {
 	
 	@GetMapping("/{id:\\d+}")
 	@JsonView(User.UserDetailView.class)
-	public User getInfo(@PathVariable String id) {
+	public User getInfo(@ApiParam(value = "用户id") @PathVariable String id) {
 //		throw new UserNotExistException(id);
 		long start = System.currentTimeMillis();
 		logger.info("进入getInfo服务" + start);
