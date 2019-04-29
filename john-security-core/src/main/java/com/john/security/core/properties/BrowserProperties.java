@@ -7,6 +7,8 @@ package com.john.security.core.properties;
 public class BrowserProperties {
 	
 	private String loginPage = "/john-signIn.html";
+	
+	private LoginType loginType = LoginType.JSON;
 
 	public String getLoginPage() {
 		return loginPage;
@@ -14,6 +16,14 @@ public class BrowserProperties {
 
 	public void setLoginPage(String loginPage) {
 		this.loginPage = loginPage;
+	}
+
+	public LoginType getLoginType() {
+		return loginType;
+	}
+
+	public void setLoginType(LoginType loginType) {
+		this.loginType = loginType;
 	}
 	
 	

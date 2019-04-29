@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.john.security.core.properties.SecurityProperties;
 
@@ -21,6 +23,11 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private SecurityProperties securityProperties;
 	
+	@Autowired
+	private AuthenticationSuccessHandler johnAuthenticationSuccessHandler;
+	@Autowired
+	private AuthenticationFailureHandler johnAuthenticationFaliureHandler;
+	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -31,6 +38,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.formLogin()//表单登录
 			.loginPage("/authentication/require")//定义登录页面
 			.loginProcessingUrl("/authentication/form")//当发起这个请求时调用security的过滤器进行处理
+			.successHandler(johnAuthenticationSuccessHandler)//表单登录成功后用自己配置的处理器进行处理
+			.failureHandler(johnAuthenticationFaliureHandler)//表单登录失败后用自己配置的处理器进行处理
 //		http.httpBasic()
 			.and()
 			.authorizeRequests()

@@ -11,6 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,6 +43,11 @@ import io.swagger.annotations.ApiParam;
 public class UserController {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	@GetMapping("/me")
+	public Object getCurrentUser(@AuthenticationPrincipal UserDetails user) {
+		return user;
+	}
 	
 	@PostMapping
 	public User create(@Valid @RequestBody User user) {
