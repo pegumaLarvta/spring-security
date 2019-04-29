@@ -9,8 +9,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.john.security.core.properties.SecurityProperties;
+import com.john.security.core.validate.code.ValidateCodeFilter;
 
 /**
 * 
@@ -35,7 +37,14 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.formLogin()//表单登录
+		
+		ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
+		validateCodeFilter.setAuthenticationFailureHandler(johnAuthenticationFaliureHandler);
+		validateCodeFilter.setSecurityProperties(securityProperties);
+		validateCodeFilter.afterPropertiesSet();
+		
+		http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)//在用户名密码前添加一个验证码过滤器
+			.formLogin()//表单登录
 			.loginPage("/authentication/require")//定义登录页面
 			.loginProcessingUrl("/authentication/form")//当发起这个请求时调用security的过滤器进行处理
 			.successHandler(johnAuthenticationSuccessHandler)//表单登录成功后用自己配置的处理器进行处理
@@ -44,7 +53,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.authorizeRequests()
 			.antMatchers("/authentication/require",
-					securityProperties.getBrowser().getLoginPage()).permitAll()//这些页面不需要身份认证
+					securityProperties.getBrowser().getLoginPage(),
+					"/code/image").permitAll()//这些页面不需要身份认证
 			.anyRequest()//访问其他的都需要身份认证
 			.authenticated()
 			.and()
