@@ -10,7 +10,7 @@ import com.john.security.core.validate.code.ValidateCodeGenerator;
 * @author 作者 john
 * @version 创建时间：2019年4月29日 下午11:01:51
 */
-@Component("imageCodeGenerator")
+//@Component("imageCodeGenerator")
 public class DemoImageCodeGenerator implements ValidateCodeGenerator {
 
 	@Override
