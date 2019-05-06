@@ -16,7 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+import com.john.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.john.security.core.properties.SecurityProperties;
+import com.john.security.core.validate.code.SmsCodeFilter;
 import com.john.security.core.validate.code.ValidateCodeFilter;
 
 /**
@@ -38,6 +40,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	private DataSource dataSource;
 	@Autowired
 	private UserDetailsService userDetailsService;
+	@Autowired
+	private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -61,7 +65,13 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 		validateCodeFilter.setSecurityProperties(securityProperties);
 		validateCodeFilter.afterPropertiesSet();
 		
-		http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)//在用户名密码前添加一个验证码过滤器
+		SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
+		smsCodeFilter.setAuthenticationFailureHandler(johnAuthenticationFaliureHandler);
+		smsCodeFilter.setSecurityProperties(securityProperties);
+		smsCodeFilter.afterPropertiesSet();
+		
+		http.addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)//在用户名密码前添加一个验证码过滤器
 			.formLogin()//表单登录
 			.loginPage("/authentication/require")//定义登录页面
 			.loginProcessingUrl("/authentication/form")//当发起这个请求时调用security的过滤器进行处理
@@ -81,7 +91,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 			.anyRequest()//访问其他的都需要身份认证
 			.authenticated()
 			.and()
-			.csrf().disable();
+			.csrf().disable()
+			.apply(smsCodeAuthenticationSecurityConfig);
 	}
 	
 }
