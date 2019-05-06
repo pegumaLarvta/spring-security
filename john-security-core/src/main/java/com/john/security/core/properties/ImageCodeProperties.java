@@ -4,13 +4,14 @@ package com.john.security.core.properties;
 * @author 作者 john
 * @version 创建时间：2019年4月29日 下午10:03:06
 */
-public class ImageCodeProperties {
+public class ImageCodeProperties extends SmsCodeProperties {
 
 	private int width = 67;
 	private int height = 23;
-	private int length = 4;
-	private int expireIn = 60;
-	private String url;
+	
+	public ImageCodeProperties() {
+		setLength(4);
+	}
 	
 	public int getWidth() {
 		return width;
@@ -27,31 +28,5 @@ public class ImageCodeProperties {
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	
-	public int getLength() {
-		return length;
-	}
-	
-	public void setLength(int length) {
-		this.length = length;
-	}
-	
-	public int getExpireIn() {
-		return expireIn;
-	}
-	
-	public void setExpireIn(int expireIn) {
-		this.expireIn = expireIn;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	
-	
 	
 }

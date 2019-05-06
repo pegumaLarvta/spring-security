@@ -1,4 +1,4 @@
-package com.john.security.core.validate.code;
+package com.john.security.core.validate.code.image;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import com.john.security.core.properties.SecurityProperties;
+import com.john.security.core.validate.code.ValidateCodeGenerator;
 
 /**
 * @author зїеп john

@@ -3,8 +3,8 @@ package com.john.code;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
 
-import com.john.security.core.validate.code.ImageCode;
 import com.john.security.core.validate.code.ValidateCodeGenerator;
+import com.john.security.core.validate.code.image.ImageCode;
 
 /**
 * @author 作者 john
