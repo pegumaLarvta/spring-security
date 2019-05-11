@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import com.john.security.core.properties.SecurityConstants;
+
 /**
 * @author 作者 john
 * @version 创建时间：2019年4月29日 下午8:39:37
@@ -19,12 +21,20 @@ import org.springframework.web.context.request.ServletWebRequest;
 public class ValidateCodeController {
 	
 	@Autowired
-	private Map<String, ValidateCodeProcessor> validateCodeProcessors;
-	
-	
-	@GetMapping("/code/{type}")
-	public void createCode(HttpServletRequest request, HttpServletResponse response, @PathVariable String type) throws Exception {
-		validateCodeProcessors.get(type + "CodeProcessor").create(new ServletWebRequest(request, response));
+	private ValidateCodeProcessorHolder validateCodeProcessorHolder;
+
+	/**
+	 * 创建验证码，根据验证码类型不同，调用不同的 {@link ValidateCodeProcessor}接口实现
+	 * 
+	 * @param request
+	 * @param response
+	 * @param type
+	 * @throws Exception
+	 */
+	@GetMapping(SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/{type}")
+	public void createCode(HttpServletRequest request, HttpServletResponse response, @PathVariable String type)
+			throws Exception {
+		validateCodeProcessorHolder.findValidateCodeProcessor(type).create(new ServletWebRequest(request, response));
 	}
 	
 

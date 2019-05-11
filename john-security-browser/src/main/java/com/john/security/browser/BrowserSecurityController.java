@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.john.security.browser.support.SimpleResponse;
 import com.john.security.core.properties.SecurityProperties;
+import com.john.security.core.properties.SecurityConstants;
 
 /**
 * @author 作者 john
@@ -30,8 +31,7 @@ import com.john.security.core.properties.SecurityProperties;
 public class BrowserSecurityController {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	
-	//session中缓存的进行用户校验前的请求
+
 	private RequestCache requestCache = new HttpSessionRequestCache();
 	
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -40,25 +40,27 @@ public class BrowserSecurityController {
 	private SecurityProperties securityProperties;
 
 	/**
-	 * 当需要省身份认证时，跳转到这里
+	 * 当需要身份认证时，跳转到这里
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 * @throws IOException 
 	 */
-	@RequestMapping("/authentication/require")
+	@RequestMapping(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL)
 	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
 	public SimpleResponse requireAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		//获取转发过来的请求
+
 		SavedRequest savedRequest = requestCache.getRequest(request, response);
+
 		if (savedRequest != null) {
 			String targetUrl = savedRequest.getRedirectUrl();
-			logger.info("引发跳转的请求是：" + targetUrl);
-			//如果请求是一个html请求跳转到登录页
-			if (StringUtils.endsWithIgnoreCase(targetUrl, ".html")) {
+			logger.info("引发跳转的请求是:"+targetUrl);
+			if(StringUtils.endsWithIgnoreCase(targetUrl, ".html")){
 				redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getLoginPage());
 			}
 		}
+
 		return new SimpleResponse("访问的服务需要身份认证，请引导用户到登录页");
 	}
 	

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.john.security.browser.support.SimpleResponse;
-import com.john.security.core.properties.LoginType;
+import com.john.security.core.properties.LoginResponseType;
 import com.john.security.core.properties.SecurityProperties;
 
 /**
@@ -39,7 +39,7 @@ public class JohnAuthenticationFaliureHandler extends SimpleUrlAuthenticationFai
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
 		logger.info("登陆失败");
-		if (LoginType.JSON.equals(securityProperties.getBrowser().getLoginType())) {
+		if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getLoginType())) {
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 			response.setContentType("application/json;charset=UTF-8");
 			response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(exception.getMessage())));

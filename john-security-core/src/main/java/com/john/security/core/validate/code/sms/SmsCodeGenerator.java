@@ -13,12 +13,19 @@ import com.john.security.core.validate.code.ValidateCodeGenerator;
 * @author 作者 john
 * @version 创建时间：2019年4月29日 下午10:48:51
 */
-@Component("smsCodeGenerator")
+@Component("smsValidateCodeGenerator")
 public class SmsCodeGenerator implements ValidateCodeGenerator {
 	
 	@Autowired
 	private SecurityProperties securityProperties;
-
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.imooc.security.core.validate.code.ValidateCodeGenerator#generate(org.
+	 * springframework.web.context.request.ServletWebRequest)
+	 */
 	@Override
 	public ValidateCode generate(ServletWebRequest request) {
 		String code = RandomStringUtils.randomNumeric(securityProperties.getCode().getSms().getLength());

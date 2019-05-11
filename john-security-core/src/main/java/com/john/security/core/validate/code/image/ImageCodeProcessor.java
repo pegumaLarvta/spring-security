@@ -12,7 +12,7 @@ import com.john.security.core.validate.code.impl.AbstractValidateCodeProcessor;
 * @author 作者 john
 * @version 创建时间：2019年5月6日 下午6:02:09
 */
-@Component("imageCodeProcessor")
+@Component("imageValidateCodeProcessor")
 public class ImageCodeProcessor extends AbstractValidateCodeProcessor<ImageCode> {
 
 	/**
