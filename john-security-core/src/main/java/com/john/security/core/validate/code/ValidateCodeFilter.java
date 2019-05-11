@@ -81,7 +81,6 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 
 		ImageCode codeInSession = (ImageCode)sessionStrategy.getAttribute(request, 
 				ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
-		
 		String codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(), "imageCode");
 		
 		if (StringUtils.isBlank(codeInRequest)) {
