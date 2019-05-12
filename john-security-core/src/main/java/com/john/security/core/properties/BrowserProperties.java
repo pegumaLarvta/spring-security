@@ -6,6 +6,8 @@ package com.john.security.core.properties;
 */
 public class BrowserProperties {
 	
+	private String signUpUrl;
+	
 	private String loginPage = SecurityConstants.DEFAULT_LOGIN_PAGE_URL;
 	
 	private LoginResponseType loginType = LoginResponseType.JSON;
@@ -37,7 +39,13 @@ public class BrowserProperties {
 	public void setRememberMeSeconds(int rememberMeSeconds) {
 		this.rememberMeSeconds = rememberMeSeconds;
 	}
-	
-	
 
+	public String getSignUpUrl() {
+		return signUpUrl;
+	}
+
+	public void setSignUpUrl(String signUpUrl) {
+		this.signUpUrl = signUpUrl;
+	}
+	
 }
